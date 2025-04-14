@@ -1,0 +1,11 @@
+/node_modules
+/.vscode
+./dist
+
+*.env
+.env
+.env.*
+
+*.local
+*.log
+*.lock
