@@ -25,7 +25,7 @@ const registerUser = asyncHandler ( async (req,res) => {
         
         
         // check if user already exist: username, email
-        const existedUser = User.findOne({
+        const existedUser = await User.findOne({
             $or: [{ username },{ email }]
         })
         if (existedUser ){
@@ -58,9 +58,13 @@ const registerUser = asyncHandler ( async (req,res) => {
             email,
             password,
         })
+
+
         // remove password and refreshToken field from response
         const createdUser = await User.findById(user._id).select(
             "-password -refreshToken"
+
+            
             // check for user creation
         )
         if (!createdUser){
