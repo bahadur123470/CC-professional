@@ -28,6 +28,7 @@ const registerUser = asyncHandler ( async (req,res) => {
     // get user details fro frontend
     const { fullName, username, email, password} = req.body
     console.log("email: ", email)
+    // console.log(req.body)
     
     
     // validation ( not empty)
@@ -114,7 +115,7 @@ const loginUser = asyncHandler ( async (req, res ) => {
     // check if user exist
     const user = await User.findOne({
         $or: [{ username}, { email}]
-    })
+    }).select("+password")
     if (!user){
         throw new ApiError(404, "User not found")
     }
@@ -155,8 +156,8 @@ const logoutUser = asyncHandler(async (req, res) => {
     await User.findByIdAndUpdate(
         req.user._id,
         {
-            $set: {
-                refreshToken: undefined
+            $unset: {
+                refreshToken: 1
             }
         },
         {
