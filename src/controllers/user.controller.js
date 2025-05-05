@@ -24,7 +24,13 @@ const generateTokens = async(userID) =>{
 }
 
 const registerUser = asyncHandler ( async (req,res) => {
-    
+    if (!req.body) {
+        console.error("Request body is undefined");
+        throw new ApiError(400, "Request body is missing");
+    }
+    console.log("Request body:", req.body);
+    console.log("Request files:", req.files);
+
     // get user details fro frontend
     const { fullName, username, email, password} = req.body
     console.log("email: ", email)
@@ -178,7 +184,7 @@ const logoutUser = asyncHandler(async (req, res) => {
 })
 
 const refreshAccessToken = asyncHandler(async (req, res) => {
-    const incomingRefreshToken = req.cookie.refreshToken || req.body.refreshToken
+    const incomingRefreshToken = req.cookies?.refreshToken || req.body.refreshToken
     if (!incomingRefreshToken){
         throw new ApiError(401, "unauthorized request")
     }
@@ -249,7 +255,12 @@ const getCurrentUser = asyncHandler(async (req, res) => {
 })
 
 const updateAccountDetails = asyncHandler(async (req, res) => {
-    
+    // if (!req.body) {
+    //     console.error("Request body is undefined");
+    //     throw new ApiError(400, "Request body is missing");
+    // }
+    // console.log("Request body:", req.body);
+
     const { fullName, username, email} = req.body
 
     if (!fullName || !username || !email){
